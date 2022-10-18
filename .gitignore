@@ -5,3 +5,4 @@ target/
 .directory
 .factorypath
 .attach_pid**
+mongo-volume/**

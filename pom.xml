@@ -89,29 +89,71 @@
 			
 			<plugin>
                 <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-compiler-plugin</artifactId>
-        <configuration>
-            <source>1.8</source>
-            <target>1.8</target>
-            <annotationProcessorPaths>
-                <path>
-                    <groupId>org.projectlombok</groupId>
-                    <artifactId>lombok</artifactId>
-                    <version>${lombok.version}</version>
-                </path>
-                <path>
-                    <groupId>org.mapstruct</groupId>
-                    <artifactId>mapstruct-processor</artifactId>
-                    <version>${org.mapstruct.version}</version>
-                </path>
-            </annotationProcessorPaths>
-            <compilerArgs>
-                <compilerArg>
-                       -Amapstruct.defaultComponentModel=spring
-                </compilerArg>
-            </compilerArgs>
-        </configuration>
+		        <artifactId>maven-compiler-plugin</artifactId>
+		        <configuration>
+		            <source>1.8</source>
+		            <target>1.8</target>
+		            <annotationProcessorPaths>
+		                <path>
+		                    <groupId>org.projectlombok</groupId>
+		                    <artifactId>lombok</artifactId>
+		                    <version>${lombok.version}</version>
+		                </path>
+		                <path>
+		                    <groupId>org.mapstruct</groupId>
+		                    <artifactId>mapstruct-processor</artifactId>
+		                    <version>${org.mapstruct.version}</version>
+		                </path>
+		            </annotationProcessorPaths>
+		            <compilerArgs>
+		                <compilerArg>
+		                       -Amapstruct.defaultComponentModel=spring
+		                </compilerArg>
+		            </compilerArgs>
+		        </configuration>
             </plugin>
+            
+            <plugin>
+			      <groupId>com.spotify</groupId>
+			      <artifactId>dockerfile-maven-plugin</artifactId>
+			      <version>1.4.10</version>
+			      <executions>
+				       <execution>
+					       <phase>install</phase>
+					       <goals>
+					          <goal>build</goal>
+					          <goal>push</goal>
+					       </goals>
+				       </execution>
+				  </executions>
+			      <configuration>
+			        <repository>yahirrl/${project.artifactId}</repository>
+			        <tag>${project.version}</tag>
+			      </configuration>
+			 </plugin>
+			 <plugin>
+			    <groupId>org.apache.maven.plugins</groupId>
+			    <artifactId>maven-dependency-plugin</artifactId>
+			    <executions>
+			        <execution>
+			            <id>unpack</id>
+			            <phase>package</phase>
+			            <goals>
+			                <goal>unpack</goal>
+			            </goals>
+			            <configuration>
+			                <artifactItems>
+			                    <artifactItem>
+			                        <groupId>${project.groupId}</groupId>
+			                        <artifactId>${project.artifactId}</artifactId>
+			                        <version>${project.version}</version>
+			                    </artifactItem>
+			                </artifactItems>
+			            </configuration>
+			        </execution>
+			    </executions>
+			 </plugin>
+            
 		</plugins>
 	</build>
 

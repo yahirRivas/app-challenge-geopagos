@@ -1,0 +1,18 @@
+version: "3"
+services:
+  mongodb:
+    image: mongo
+    container_name: "mongodb"
+    ports:
+      - 27017:27017
+  api-app-challenge:
+    image: yahirrl/app-challenge-geopagos:1.0
+    container_name: "app-challenge-geopagos"
+    environment:
+      - MONGO_HOST=mongodb
+    ports:
+      - 8080:8080
+    depends_on:
+      - mongodb
+    links:
+      - mongodb
