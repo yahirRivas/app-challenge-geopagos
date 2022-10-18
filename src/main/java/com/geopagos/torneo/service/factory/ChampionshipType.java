@@ -1,4 +1,4 @@
-package com.geopagos.torneo.service;
+package com.geopagos.torneo.service.factory;
 
 import java.util.Collections;
 import java.util.stream.Stream;

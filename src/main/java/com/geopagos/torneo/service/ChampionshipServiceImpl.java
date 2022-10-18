@@ -1,6 +1,7 @@
 package com.geopagos.torneo.service;
 
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -8,6 +9,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.geopagos.torneo.service.dto.PlayerServiceDTO;
+import com.geopagos.torneo.service.factory.ChampionshipType;
+import static com.geopagos.torneo.util.Constants.FINAL;
+import static com.geopagos.torneo.util.Constants.WINNER;
 
 @Service
 public class ChampionshipServiceImpl implements ChampionshipService {
@@ -16,7 +20,7 @@ public class ChampionshipServiceImpl implements ChampionshipService {
 	private PlayerService playerService;
 	
 	@Override
-	public Map<String, List<Map<String, String>>> simulate(String gender, boolean showDetails) {
+	public Map<String, List<Map<String, String>>> simulate(String gender) {
 		
 		List<PlayerServiceDTO> players = playerService.findAllPlayers();
 
@@ -27,18 +31,28 @@ public class ChampionshipServiceImpl implements ChampionshipService {
 				Collectors.toList()));
 		
 		List<PlayerServiceDTO> playersByGender = groupByGender.get(gender);
+		
 		if (playersByGender == null) {
 			return Collections.emptyMap();
 		}
 
-		Map<String, List<Map<String, String>>> championship = ChampionshipType.getChampionship(gender).run(playersByGender);
+		return ChampionshipType.getChampionship(gender).run(playersByGender);
+	}
 
-		if(!showDetails && !championship.isEmpty()) {
-			List<Map<String, String>> finalResult = championship.get("Final");
-			championship.clear();
-			championship.put("Champion", finalResult);
-		}
+	@Override
+	public Map<String, String> getWinner(String gender) {
 		
-		return championship;
+		Map<String, String> winnerMap = new HashMap<>();
+		Map<String, List<Map<String, String>>> championshipSimulate = simulate(gender);
+		
+		if(!championshipSimulate.isEmpty()) {
+			List<Map<String, String>> finalResult = championshipSimulate.get(FINAL);
+	
+			String winner = finalResult.get(0).get(WINNER);
+			
+			winnerMap.put(WINNER, winner);
+		}
+
+		return winnerMap;
 	}
 }

@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class PlayerRepositoryDTO {
 
+	private String id;
 	private String name;
 	private String gender;
 	private Integer speed;

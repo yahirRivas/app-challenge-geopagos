@@ -1,4 +1,4 @@
-package com.geopagos.torneo.service;
+package com.geopagos.torneo.service.factory;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -7,6 +7,12 @@ import java.util.List;
 import java.util.Map;
 
 import com.geopagos.torneo.service.dto.PlayerServiceDTO;
+import static com.geopagos.torneo.util.Constants.QUARTERFINALS;
+import static com.geopagos.torneo.util.Constants.SEMIFINALS;
+import static com.geopagos.torneo.util.Constants.WINNER;
+import static com.geopagos.torneo.util.Constants.FINAL;
+import static com.geopagos.torneo.util.Constants.MATCH;
+
 
 public class MenChampionship implements Championship {
 
@@ -16,17 +22,16 @@ public class MenChampionship implements Championship {
 		Map<String, List<Map<String, String>>> result = new HashMap<>();
 
 		Map<PlayerServiceDTO, Map<String, String>> quarterfinals = game(players);	
-		result.put("Quarterfinals", new ArrayList<>(quarterfinals.values()));
+		result.put(QUARTERFINALS, new ArrayList<>(quarterfinals.values()));
 		
 		Map<PlayerServiceDTO, Map<String, String>> semifinales = game(quarterfinals.keySet());
-		result.put("Semifinals", new ArrayList<>(semifinales.values()));
+		result.put(SEMIFINALS, new ArrayList<>(semifinales.values()));
 		
 		Map<PlayerServiceDTO, Map<String, String>> finalGame = game(semifinales.keySet());
-		result.put("Final", new ArrayList<>(finalGame.values()));
+		result.put(FINAL, new ArrayList<>(finalGame.values()));
 
 		return result;
 	}
-	
 	
 	private Map<PlayerServiceDTO, Map<String, String>> game(Collection<PlayerServiceDTO> players) {
 
@@ -41,15 +46,15 @@ public class MenChampionship implements Championship {
 			
 			if (i % 2 == 0) {
 				Map<String, String> match = new HashMap<>();
-				match.put("Match", String.format("%s vs %s", playerOther.getName(), player.getName()));
+				match.put(MATCH, String.format("%s vs %s", playerOther.getName(), player.getName()));
 				int skillOther = playerOther.getSpeed() + playerOther.getStrength();
 				int skill = player.getSpeed() + player.getStrength();
 				
 				if(skillOther > skill) {
-					match.put("Winner", playerOther.getName());
+					match.put(WINNER, playerOther.getName());
 					matches.put(playerOther, match);
 				} else {
-					match.put("Winner", player.getName());
+					match.put(WINNER, player.getName());
 					matches.put(player, match);
 				}
 				playerOther = null;
@@ -60,5 +65,4 @@ public class MenChampionship implements Championship {
 		
 		return matches;
 	}
-
 }

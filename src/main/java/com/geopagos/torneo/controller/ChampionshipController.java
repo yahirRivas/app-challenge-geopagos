@@ -24,9 +24,15 @@ public class ChampionshipController {
 	
 	@GetMapping
 	public Map<String, List<Map<String, String>>> simulate(@RequestParam(value = "gender", required = false, defaultValue = "M") String gender,
-										@RequestParam(value = "showDetails", required = false, defaultValue = "") String showDetails) {
+										@RequestParam(value = "showDetails", required = false, defaultValue = "false") String showDetails) {
 		log.info("call service simulate()");
-		return championshipService.simulate(gender, Boolean.valueOf(showDetails));
+		return championshipService.simulate(gender);
+	}
+	
+	@GetMapping("/winner")
+	public Map<String, String> getWinner(@RequestParam(value = "gender", required = false, defaultValue = "M") String gender){
+		log.info("call service getWinner()");
+		return championshipService.getWinner(gender);
 	}
 	
 }

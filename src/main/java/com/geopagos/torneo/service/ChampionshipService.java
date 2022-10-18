@@ -5,5 +5,6 @@ import java.util.Map;
 
 public interface ChampionshipService {
 
-	Map<String, List<Map<String, String>>> simulate(String gender, boolean showDetails);
+	Map<String, List<Map<String, String>>> simulate(String gender);
+	Map<String, String> getWinner(String gender);
 }
