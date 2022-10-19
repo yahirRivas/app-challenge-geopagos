@@ -1,15 +1,24 @@
 package com.geopagos.torneo;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+
+import javax.servlet.ServletContext;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+
 import com.geopagos.torneo.model.Player;
 import com.geopagos.torneo.repository.PlayerRepository;
+
+import io.swagger.v3.oas.models.OpenAPI;
+import io.swagger.v3.oas.models.info.Info;
+import io.swagger.v3.oas.models.info.License;
+import io.swagger.v3.oas.models.servers.Server;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -48,6 +57,21 @@ public class AppChallengeGeopagosApplication {
 	    	log.info("Finish load data players");  
 	    };
 	}
+	
+	
+    @Bean
+    public OpenAPI openAPI(ServletContext servletContext) {
+    	Server server = new Server();
+        server.setUrl(servletContext.getContextPath());
+
+        return new OpenAPI().info(new Info().title("Tennis Championships API")
+            .version("1.0")
+            .description("This is a challenge with OpenAPI 3.")
+            .termsOfService("http://swagger.io/terms/")
+            .license(new License().name("Apache 2.0")
+                .url("http://springdoc.org")))
+        	.servers(Arrays.asList(server));
+    }
 	
 	public static void main(String[] args) {
 		SpringApplication.run(AppChallengeGeopagosApplication.class, args);
